@@ -1,0 +1,19 @@
+.tools/
+.run/
+.idea/
+.vscode/
+*.log
+
+# Backend
+backend/target/
+backend/data/*.mv.db
+backend/data/*.trace.db
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+
+# QA temporal
+tmp/
+
