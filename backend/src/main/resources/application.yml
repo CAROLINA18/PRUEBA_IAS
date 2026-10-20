@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: preapproved-api
+  r2dbc:
+    url: r2dbc:h2:file:///./data/bancoias;DB_CLOSE_DELAY=-1
+    username: sa
+    password: ""
+  sql:
+    init:
+      mode: always
+      encoding: UTF-8
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+server:
+  port: 8080
+  error:
+    include-message: never
+

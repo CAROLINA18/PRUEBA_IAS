@@ -9,11 +9,11 @@
 
 ## Fase 2 - Backend
 
-- [ ] Generar proyecto WebFlux/R2DBC reproducible.
-- [ ] Crear esquema persistente y datos semilla idempotentes.
-- [ ] Implementar procesamiento transaccional e idempotente.
-- [ ] Implementar consultas y manejo uniforme de errores.
-- [ ] Automatizar pruebas de reglas y concurrencia.
+- [x] Generar proyecto WebFlux/R2DBC reproducible.
+- [x] Crear esquema persistente y datos semilla idempotentes.
+- [x] Implementar procesamiento transaccional e idempotente.
+- [x] Implementar consultas y manejo uniforme de errores.
+- [x] Automatizar pruebas de reglas y concurrencia.
 
 ## Fase 3 - Frontend
 
@@ -28,4 +28,3 @@
 - [ ] Documentar decisiones, uso de IA, limitaciones y ejecución.
 - [ ] Ejecutar pruebas, build, smoke test y QA visual.
 - [ ] Actualizar trazabilidad y marcar tareas terminadas.
-
