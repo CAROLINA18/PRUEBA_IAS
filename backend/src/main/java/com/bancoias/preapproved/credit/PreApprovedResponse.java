@@ -1,8 +1,6 @@
-package com.bancoias.preapproved.api;
+package com.bancoias.preapproved.credit;
 
 import java.math.BigDecimal;
-
-import com.bancoias.preapproved.domain.PreApprovedEntity;
 
 public record PreApprovedResponse(
         String id,
@@ -15,4 +13,3 @@ public record PreApprovedResponse(
                 entity.id(), entity.customerId(), entity.status(), entity.availableAmount());
     }
 }
-

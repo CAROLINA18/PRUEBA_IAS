@@ -1,4 +1,4 @@
-package com.bancoias.preapproved.application;
+package com.bancoias.preapproved.usage;
 
 public class BadRequestException extends RuntimeException {
 
@@ -6,4 +6,3 @@ public class BadRequestException extends RuntimeException {
         super(message);
     }
 }
-

@@ -16,15 +16,18 @@ La IA se usó como acelerador de análisis y desarrollo dentro del tiempo limita
 ## Resultados incorporados
 
 - Estructura spec-driven en `specs/001-preapproved-usage/`.
+- Organización vertical por funcionalidades en backend y frontend.
 - Servicio WebFlux/R2DBC con transacción reactiva y descuento condicional.
-- Pruebas de autorización, rechazo, repetición, conflicto y concurrencia.
+- Pruebas unitarias y de integración de autorización, rechazo, repetición, conflicto y concurrencia.
+- Pruebas Angular del componente y del contrato HTTP.
 - Formulario Angular, resultado y tabla de solicitudes recientes.
 - Scripts PowerShell para preparar, ejecutar, detener y validar.
 
 ## Cómo se validaron
 
 - Compilación con Java 21 como nivel objetivo.
-- Pruebas automáticas con Maven y Reactor Test.
+- Nueve pruebas backend con JUnit, Mockito y Reactor Test.
+- Ocho pruebas frontend con Jasmine, Karma y Chrome Headless.
 - Build de producción de Angular.
 - Smoke test de los endpoints y recorrido del flujo principal en navegador.
 - Inspección visual en escritorio y móvil contra el concepto guardado en la spec.
@@ -36,6 +39,7 @@ La IA se usó como acelerador de análisis y desarrollo dentro del tiempo limita
 - Se descartaron arquitecturas más complejas (eventos, Docker y base externa) por exceder el alcance.
 - Se corrigió el Maven Wrapper generado por Spring Initializr para manejar una ruta `.m2` no enlazada en PowerShell.
 - Se corrigió el mapeo de mayúsculas/minúsculas de H2 detectado por las pruebas.
+- Se adaptó la estructura inicialmente organizada por capas técnicas a slices verticales y se volvió a ejecutar toda la suite.
 - El contenido ficticio del concepto visual no se usó como dato real; la UI consume únicamente el backend.
 
 ## Protección de información
@@ -45,4 +49,3 @@ No se enviaron credenciales, datos bancarios reales, secretos ni información co
 ## Responsabilidad
 
 La IA propuso y aceleró artefactos; la persona candidata conserva la responsabilidad sobre las decisiones, la validación, las correcciones y la explicación técnica de la solución.
-

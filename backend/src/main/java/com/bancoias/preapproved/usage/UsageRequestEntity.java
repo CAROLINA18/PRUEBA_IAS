@@ -1,4 +1,4 @@
-package com.bancoias.preapproved.domain;
+package com.bancoias.preapproved.usage;
 
 import java.math.BigDecimal;
 import java.time.Instant;

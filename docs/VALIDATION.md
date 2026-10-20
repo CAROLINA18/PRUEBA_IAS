@@ -13,16 +13,19 @@ Fecha: 19 de octubre de 2026.
 
 | Validación | Resultado |
 | --- | --- |
+| Pruebas unitarias del backend | 4 ejecutadas, 0 fallos, 0 errores |
 | Pruebas de integración del backend | 5 ejecutadas, 0 fallos, 0 errores |
-| Compilación de producción de Angular | Correcta, paquete inicial de 237,71 kB |
+| Pruebas unitarias de Angular | 8 ejecutadas, 0 fallos, Chrome Headless |
+| Compilación de producción de Angular | Correcta, paquete inicial de 237,98 kB |
 | Arranque mediante `scripts/run.ps1` | Backend y frontend disponibles |
 | Flujo real desde la interfaz | Solicitud autorizada y visible en recientes |
 | Consola del navegador | Sin errores ni advertencias |
 | Vista móvil de 390 px | Sin desbordamiento horizontal de la página |
 
-Las pruebas del backend cubren autorización, rechazo sin débito, repetición
-idempotente, conflicto por referencia reutilizada y dos solicitudes concurrentes
-que compiten por el mismo saldo.
+Las pruebas del backend cubren validación aislada, consulta, repetición idempotente,
+conflicto por referencia, autorización, rechazo sin débito y dos solicitudes
+concurrentes que compiten por el mismo saldo. Las pruebas Angular cubren el
+formulario, carga inicial, resultado, error, sincronización del cliente y rutas HTTP.
 
 ## QA funcional y visual
 

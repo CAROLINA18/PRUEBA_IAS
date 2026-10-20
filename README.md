@@ -23,7 +23,7 @@ Abre [http://127.0.0.1:4200](http://127.0.0.1:4200). Para detener ambos procesos
 .\scripts\stop.ps1
 ```
 
-`setup.ps1` verifica Java y Node.js, intenta instalarlos con `winget` si faltan, descarga Maven mediante el wrapper oficial y ejecuta `npm install`. `run.ps1` compila el backend si es necesario, inicia backend y frontend en segundo plano, espera sus health checks y guarda logs/PID temporales en `.run/`.
+`setup.ps1` verifica Java y Node.js, intenta instalarlos con `winget` si faltan, descarga Maven mediante el wrapper oficial y ejecuta `npm install`. `run.ps1` compila el backend, inicia backend y frontend en segundo plano, espera sus health checks y guarda logs/PID temporales en `.run/`.
 
 ## Validación automática
 
@@ -31,13 +31,15 @@ Abre [http://127.0.0.1:4200](http://127.0.0.1:4200). Para detener ambos procesos
 .\scripts\test.ps1
 ```
 
-El script ejecuta cinco pruebas de integración del backend y el build de producción de Angular. Las pruebas cubren:
+El script ejecuta 9 pruebas backend —4 unitarias y 5 de integración—, 8 pruebas unitarias Angular y el build de producción. Las pruebas cubren:
 
 - autorización y descuento;
 - rechazo sin descuento;
 - repetición idempotente;
 - conflicto de referencia con payload distinto;
 - dos solicitudes simultáneas que compiten por el mismo saldo.
+- validación del formulario, resultado, errores y sincronización del cliente;
+- contrato HTTP utilizado por el servicio Angular.
 
 ## Flujo de demostración
 
@@ -83,6 +85,19 @@ El camino HTTP no usa JPA ni JDBC: controlador, servicio, repositorio y transacc
 
 El saldo se descuenta mediante un `UPDATE` atómico condicionado a que el preaprobado continúe activo, pertenezca al cliente y tenga saldo. El descuento y el insert de la solicitud comparten una transacción reactiva. `request_reference` tiene restricción única; si dos peticiones con la misma referencia compiten, la transacción perdedora revierte y recupera el resultado original.
 
+## Arquitectura vertical
+
+El código se organiza por capacidad de negocio, de modo que cada cambio funcional quede localizado:
+
+```text
+backend/.../usage/       procesar y consultar solicitudes
+backend/.../credit/      consultar y debitar preaprobados
+backend/.../shared/      configuración y errores transversales
+frontend/src/app/features/preapproved-usage/  flujo completo de la pantalla
+```
+
+Cada slice conserva juntos endpoint, caso de uso, modelos, acceso a datos y pruebas que cambian por la misma razón. `shared` no contiene reglas de negocio. Las directrices para extender la solución están en `.kiro/steering/`.
+
 ## Datos semilla
 
 | Preaprobado | Cliente | Estado | Cupo inicial |
@@ -109,8 +124,8 @@ Las decisiones y sus trade-offs están en [DECISIONS.md](docs/DECISIONS.md). El 
 ## Estructura
 
 ```text
-backend/    Spring Boot WebFlux + R2DBC + pruebas
-frontend/   Angular standalone
+backend/    Slices verticales Spring WebFlux + R2DBC + pruebas
+frontend/   Slice vertical Angular standalone
 scripts/    setup, ejecución, parada y validación
 specs/      especificación y criterios de aceptación
 docs/       decisiones y registro de IA

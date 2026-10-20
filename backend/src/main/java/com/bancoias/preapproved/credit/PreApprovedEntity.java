@@ -1,4 +1,4 @@
-package com.bancoias.preapproved.domain;
+package com.bancoias.preapproved.credit;
 
 import java.math.BigDecimal;
 
@@ -12,4 +12,3 @@ public record PreApprovedEntity(
         String status,
         BigDecimal availableAmount) {
 }
-

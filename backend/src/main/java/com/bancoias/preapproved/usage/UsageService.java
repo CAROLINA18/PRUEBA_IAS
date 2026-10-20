@@ -1,16 +1,11 @@
-package com.bancoias.preapproved.application;
+package com.bancoias.preapproved.usage;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Objects;
 
-import com.bancoias.preapproved.api.UsageCommand;
-import com.bancoias.preapproved.api.UsageResponse;
-import com.bancoias.preapproved.domain.PreApprovedEntity;
-import com.bancoias.preapproved.domain.RequestStatus;
-import com.bancoias.preapproved.domain.UsageRequestEntity;
-import com.bancoias.preapproved.persistence.PreApprovedStore;
-import com.bancoias.preapproved.persistence.UsageRequestRepository;
+import com.bancoias.preapproved.credit.PreApprovedEntity;
+import com.bancoias.preapproved.credit.PreApprovedStore;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.ReactiveTransactionManager;
@@ -154,4 +149,3 @@ public class UsageService {
         return Objects.requireNonNullElse(value, "").trim();
     }
 }
-

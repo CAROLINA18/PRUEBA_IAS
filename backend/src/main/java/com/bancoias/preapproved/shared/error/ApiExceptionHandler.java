@@ -1,10 +1,10 @@
-package com.bancoias.preapproved.api;
+package com.bancoias.preapproved.shared.error;
 
 import java.time.Instant;
 
-import com.bancoias.preapproved.application.BadRequestException;
-import com.bancoias.preapproved.application.NotFoundException;
-import com.bancoias.preapproved.application.ReferenceConflictException;
+import com.bancoias.preapproved.usage.BadRequestException;
+import com.bancoias.preapproved.usage.NotFoundException;
+import com.bancoias.preapproved.usage.ReferenceConflictException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -34,4 +34,3 @@ public class ApiExceptionHandler {
     public record ApiError(String code, String message, Instant timestamp) {
     }
 }
-

@@ -1,7 +1,5 @@
-package com.bancoias.preapproved.api;
+package com.bancoias.preapproved.usage;
 
-import com.bancoias.preapproved.application.UsageService;
-import com.bancoias.preapproved.persistence.PreApprovedStore;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,35 +10,27 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/requests")
 public class UsageController {
 
     private final UsageService usageService;
-    private final PreApprovedStore preApprovedStore;
 
-    public UsageController(UsageService usageService, PreApprovedStore preApprovedStore) {
+    public UsageController(UsageService usageService) {
         this.usageService = usageService;
-        this.preApprovedStore = preApprovedStore;
     }
 
-    @PostMapping("/requests")
+    @PostMapping
     public Mono<UsageResponse> process(@RequestBody UsageCommand command) {
         return usageService.process(command);
     }
 
-    @GetMapping("/requests/{requestReference}")
+    @GetMapping("/{requestReference}")
     public Mono<UsageResponse> findByReference(@PathVariable String requestReference) {
         return usageService.findByReference(requestReference);
     }
 
-    @GetMapping("/requests/recent")
+    @GetMapping("/recent")
     public Flux<UsageResponse> findRecent() {
         return usageService.findRecent();
     }
-
-    @GetMapping("/pre-approved")
-    public Flux<PreApprovedResponse> findPreApproved() {
-        return preApprovedStore.findAll().map(PreApprovedResponse::from);
-    }
 }
-

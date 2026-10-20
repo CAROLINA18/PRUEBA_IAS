@@ -1,10 +1,7 @@
-package com.bancoias.preapproved.api;
+package com.bancoias.preapproved.usage;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-
-import com.bancoias.preapproved.domain.RequestStatus;
-import com.bancoias.preapproved.domain.UsageRequestEntity;
 
 public record UsageResponse(
         String requestReference,
@@ -30,4 +27,3 @@ public record UsageResponse(
                 replayed);
     }
 }
-

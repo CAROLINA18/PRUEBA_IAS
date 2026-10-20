@@ -1,7 +1,6 @@
-package com.bancoias.preapproved.domain;
+package com.bancoias.preapproved.usage;
 
 public enum RequestStatus {
     AUTHORIZED,
     REJECTED
 }
-

@@ -1,13 +1,10 @@
-package com.bancoias.preapproved.application;
+package com.bancoias.preapproved.usage;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.bancoias.preapproved.api.UsageCommand;
-import com.bancoias.preapproved.api.UsageResponse;
-import com.bancoias.preapproved.domain.RequestStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,4 +140,3 @@ class UsageServiceIntegrationTest {
                 .verifyComplete();
     }
 }
-

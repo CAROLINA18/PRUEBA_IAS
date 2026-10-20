@@ -6,19 +6,18 @@ import { PreApproved, UsageCommand, UsageResponse } from './models';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
+  private static readonly BASE_URL = 'http://localhost:8080/api';
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = 'http://localhost:8080/api';
 
   process(command: UsageCommand): Observable<UsageResponse> {
-    return this.http.post<UsageResponse>(`${this.baseUrl}/requests`, command);
+    return this.http.post<UsageResponse>(`${ApiService.BASE_URL}/requests`, command);
   }
 
   recent(): Observable<UsageResponse[]> {
-    return this.http.get<UsageResponse[]>(`${this.baseUrl}/requests/recent`);
+    return this.http.get<UsageResponse[]>(`${ApiService.BASE_URL}/requests/recent`);
   }
 
   preApproved(): Observable<PreApproved[]> {
-    return this.http.get<PreApproved[]>(`${this.baseUrl}/pre-approved`);
+    return this.http.get<PreApproved[]>(`${ApiService.BASE_URL}/pre-approved`);
   }
 }
-

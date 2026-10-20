@@ -16,19 +16,17 @@ if (-not (Test-Path -LiteralPath $angularCli)) {
     throw 'Faltan dependencias del frontend. Ejecuta primero .\scripts\setup.ps1.'
 }
 
-if (-not (Test-Path -LiteralPath $backendJar)) {
-    Write-Host 'Compilando backend por primera vez...' -ForegroundColor Cyan
-    $env:MAVEN_USER_HOME = $mavenHome
-    Push-Location (Join-Path $projectRoot 'backend')
-    try {
-        & '.\mvnw.cmd' package -DskipTests --no-transfer-progress
-        if ($LASTEXITCODE -ne 0) {
-            throw 'No fue posible compilar el backend.'
-        }
+Write-Host 'Compilando backend...' -ForegroundColor Cyan
+$env:MAVEN_USER_HOME = $mavenHome
+Push-Location (Join-Path $projectRoot 'backend')
+try {
+    & '.\mvnw.cmd' package -DskipTests --no-transfer-progress
+    if ($LASTEXITCODE -ne 0) {
+        throw 'No fue posible compilar el backend.'
     }
-    finally {
-        Pop-Location
-    }
+}
+finally {
+    Pop-Location
 }
 
 $backendOut = Join-Path $runRoot 'backend.out.log'

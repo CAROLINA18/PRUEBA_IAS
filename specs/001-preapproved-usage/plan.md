@@ -7,7 +7,7 @@
 - Frontend: Angular 20.3, componentes standalone y formularios reactivos.
 - Automatización local: PowerShell para preparar, ejecutar, detener y validar.
 
-## Arquitectura mínima
+## Arquitectura vertical mínima
 
 ```text
 Angular (4200)
@@ -17,7 +17,14 @@ Spring WebFlux (8080)
 R2DBC / H2 archivo
 ```
 
-El backend separa API, aplicación y persistencia sin introducir módulos o patrones adicionales que no aporten al alcance de dos horas.
+El código se agrupa por funcionalidad y no por tipo técnico global:
+
+- `usage`: endpoint, caso de uso, contrato, entidad y repositorio de solicitudes.
+- `credit`: endpoint de consulta, modelo y acceso reactivo al cupo preaprobado.
+- `shared`: únicamente CORS y traducción transversal de errores.
+- `features/preapproved-usage`: formulario, modelos, cliente HTTP y pruebas Angular.
+
+La dependencia principal va de `usage` hacia `credit`, porque procesar un uso necesita consultar y debitar el cupo. Las slices no dependen de detalles internos del frontend ni de paquetes técnicos globales.
 
 ## Estrategia de consistencia
 
@@ -38,7 +45,9 @@ Esta estrategia evita un coordinador en memoria y sigue siendo correcta con vari
 
 ## Verificación
 
+- Pruebas unitarias backend de normalización, consulta e idempotencia.
 - Pruebas de integración de autorización, rechazo, idempotencia, conflicto y concurrencia.
+- Pruebas unitarias Angular del componente y contrato HTTP del servicio.
 - Compilación de producción de Angular.
 - Smoke test del API y recorrido navegador: cargar -> procesar -> mostrar resultado -> actualizar recientes.
 - Inspección visual en escritorio y móvil contra `design-concept.png`.
@@ -51,4 +60,3 @@ Esta estrategia evita un coordinador en memoria y sigue siendo correcta con vari
 | Doble descuento por reintento | índice único + reversión transaccional + recuperación del original |
 | Dependencias locales | scripts y Maven Wrapper; versiones fijadas |
 | H2 no representa producción | limitación documentada; SQL y transacciones son migrables a PostgreSQL |
-

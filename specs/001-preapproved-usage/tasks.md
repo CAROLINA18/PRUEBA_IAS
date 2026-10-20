@@ -28,3 +28,12 @@
 - [x] Documentar decisiones, uso de IA, limitaciones y ejecución.
 - [x] Ejecutar pruebas, build, smoke test y QA visual.
 - [x] Actualizar trazabilidad y marcar tareas terminadas.
+
+## Fase 5 - Arquitectura vertical y pruebas unitarias
+
+- [x] Reorganizar backend en slices `usage`, `credit` y `shared`.
+- [x] Reorganizar frontend en `features/preapproved-usage`.
+- [x] Agregar pruebas unitarias aisladas al backend.
+- [x] Agregar pruebas unitarias de componente y servicio HTTP al frontend.
+- [x] Incorporar steering de producto, tecnología y estructura.
+- [x] Ejecutar nuevamente pruebas, build y smoke test.

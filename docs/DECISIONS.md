@@ -8,7 +8,7 @@
 
 **Decisión.** H2 en archivo con R2DBC. Los datos semilla se insertan solo si no existen y las solicitudes sobreviven reinicios.
 
-**Trade-off.** H2 no reemplaza una validación productiva sobre PostgreSQL. La capa SQL está aislada para facilitar ese cambio.
+**Trade-off.** H2 no reemplaza una validación productiva sobre PostgreSQL. El acceso SQL queda localizado en la slice responsable para facilitar ese cambio.
 
 **Validación.** Pruebas de integración levantan el contexto R2DBC y ejecutan lecturas, actualizaciones y transacciones reales.
 
@@ -46,7 +46,16 @@
 
 **Validación.** Reactor Test suscribe y verifica los publishers sin convertir el servicio a una API imperativa.
 
-## 5. Alcance deliberadamente mínimo
+## 5. Slices verticales por capacidad
 
-Se excluyen RabbitMQ, autenticación, administración de maestros, paginación avanzada, Docker y patrones distribuidos. Todos están fuera del criterio obligatorio o agregarían una dependencia innecesaria. La estructura conserva separación entre API, aplicación y persistencia sin crear capas ceremoniales.
+**Contexto.** La estructura inicial agrupaba controladores, servicios, dominio y persistencia en paquetes técnicos globales. Para una aplicación pequeña funciona, pero hace que una sola funcionalidad quede distribuida entre varias carpetas.
 
+**Decisión.** Agrupar por capacidad: `usage` contiene el flujo completo de solicitudes, `credit` contiene consulta y débito de preaprobados, y `shared` se limita a configuración y errores transversales. Angular concentra la pantalla, modelos, API y pruebas en `features/preapproved-usage`.
+
+**Trade-off.** Las slices pueden contener clases de distintos tipos técnicos. A cambio, los elementos que cambian juntos están juntos y es más fácil localizar el impacto de una funcionalidad.
+
+**Validación.** La suite completa pasa después del movimiento y los contratos HTTP permanecen iguales.
+
+## 6. Alcance deliberadamente mínimo
+
+Se excluyen RabbitMQ, autenticación, administración de maestros, paginación avanzada, Docker y patrones distribuidos. Todos están fuera del criterio obligatorio o agregarían una dependencia innecesaria. La arquitectura vertical evita capas ceremoniales y mantiene `shared` pequeño.

@@ -1,4 +1,4 @@
-package com.bancoias.preapproved.config;
+package com.bancoias.preapproved.shared.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.config.CorsRegistry;
@@ -15,4 +15,3 @@ public class WebConfig implements WebFluxConfigurer {
                 .allowedHeaders("*");
     }
 }
-

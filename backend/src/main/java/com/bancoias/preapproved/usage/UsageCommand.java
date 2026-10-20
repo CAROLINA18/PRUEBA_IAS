@@ -1,4 +1,4 @@
-package com.bancoias.preapproved.api;
+package com.bancoias.preapproved.usage;
 
 import java.math.BigDecimal;
 
@@ -8,4 +8,3 @@ public record UsageCommand(
         String customerId,
         BigDecimal amount) {
 }
-

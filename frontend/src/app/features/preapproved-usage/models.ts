@@ -1,3 +1,5 @@
+export type UsageStatus = 'AUTHORIZED' | 'REJECTED';
+
 export interface UsageCommand {
   requestReference: string;
   preApprovedId: string;
@@ -6,7 +8,7 @@ export interface UsageCommand {
 }
 
 export interface UsageResponse extends UsageCommand {
-  status: 'AUTHORIZED' | 'REJECTED';
+  status: UsageStatus;
   rejectionReason: string | null;
   processedAt: string;
   remainingAmount: number | null;
@@ -25,4 +27,3 @@ export interface ApiError {
   message: string;
   timestamp: string;
 }
-

@@ -1,4 +1,4 @@
-package com.bancoias.preapproved.application;
+package com.bancoias.preapproved.usage;
 
 public class ReferenceConflictException extends RuntimeException {
 
@@ -6,4 +6,3 @@ public class ReferenceConflictException extends RuntimeException {
         super(message);
     }
 }
-

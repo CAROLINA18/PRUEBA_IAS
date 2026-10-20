@@ -1,4 +1,4 @@
-package com.bancoias.preapproved.application;
+package com.bancoias.preapproved.usage;
 
 public class NotFoundException extends RuntimeException {
 
@@ -6,4 +6,3 @@ public class NotFoundException extends RuntimeException {
         super(message);
     }
 }
-

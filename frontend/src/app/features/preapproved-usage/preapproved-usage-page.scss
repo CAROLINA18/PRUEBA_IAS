@@ -2,6 +2,7 @@
   display: block;
   min-height: 100vh;
   color: #09224b;
+  isolation: isolate;
 }
 
 .topbar {
@@ -431,4 +432,3 @@ table {
     transition-duration: 0.01ms !important;
   }
 }
-
