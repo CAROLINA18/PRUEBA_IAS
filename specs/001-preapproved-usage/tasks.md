@@ -20,11 +20,11 @@
 - [x] Generar aplicación Angular standalone.
 - [x] Implementar formulario, resultado y solicitudes recientes.
 - [x] Integrar API real y estados de carga/error.
-- [ ] Adaptar escritorio/móvil al concepto visual aprobado.
+- [x] Adaptar escritorio/móvil al concepto visual aprobado.
 
 ## Fase 4 - Operación y entrega
 
-- [ ] Crear scripts de preparación, ejecución, parada y validación.
-- [ ] Documentar decisiones, uso de IA, limitaciones y ejecución.
-- [ ] Ejecutar pruebas, build, smoke test y QA visual.
-- [ ] Actualizar trazabilidad y marcar tareas terminadas.
+- [x] Crear scripts de preparación, ejecución, parada y validación.
+- [x] Documentar decisiones, uso de IA, limitaciones y ejecución.
+- [x] Ejecutar pruebas, build, smoke test y QA visual.
+- [x] Actualizar trazabilidad y marcar tareas terminadas.
