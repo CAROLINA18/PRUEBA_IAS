@@ -119,6 +119,51 @@
       </button>
     </div>
 
+    <form class="lookup-form" (submit)="lookupByReference(); $event.preventDefault()">
+      <label for="referenceQuery">Consultar una solicitud por referencia</label>
+      <div class="lookup-controls">
+        <input
+          id="referenceQuery"
+          type="text"
+          placeholder="Ej. REF-001"
+          autocomplete="off"
+          [formControl]="referenceQuery"
+        />
+        <button class="lookup-button" type="submit" [disabled]="searching">
+          {{ searching ? 'Consultando…' : 'Consultar' }}
+        </button>
+      </div>
+      @if (referenceQuery.touched && referenceQuery.invalid) {
+        <small>Ingresa una referencia.</small>
+      }
+    </form>
+
+    @if (lookupError) {
+      <div class="lookup-feedback lookup-error" role="alert">
+        <strong>No se encontró la solicitud</strong>
+        <span>{{ lookupError }}</span>
+      </div>
+    } @else if (lookupResult) {
+      <div class="lookup-feedback" role="status">
+        <div>
+          <span>Referencia</span>
+          <strong>{{ lookupResult.requestReference }}</strong>
+        </div>
+        <div>
+          <span>Estado</span>
+          <strong>{{ lookupResult.status === 'AUTHORIZED' ? 'AUTORIZADA' : 'RECHAZADA' }}</strong>
+        </div>
+        <div>
+          <span>Valor</span>
+          <strong>{{ formatCurrency(lookupResult.amount) }}</strong>
+        </div>
+        <div>
+          <span>Procesada</span>
+          <strong>{{ formatDate(lookupResult.processedAt) }}</strong>
+        </div>
+      </div>
+    }
+
     <div class="table-scroll">
       <table>
         <thead>
@@ -132,7 +177,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (item of recent; track item.requestReference) {
+          @for (item of paginatedRecent; track item.requestReference) {
             <tr>
               <td>{{ item.requestReference }}</td>
               <td>{{ item.preApprovedId }}</td>
@@ -153,5 +198,15 @@
         </tbody>
       </table>
     </div>
+
+    <nav class="pagination" aria-label="Paginación de solicitudes recientes">
+      <button type="button" (click)="previousPage()" [disabled]="currentPage === 0">
+        Anterior
+      </button>
+      <span>Página {{ currentPage + 1 }} de {{ totalPages }}</span>
+      <button type="button" (click)="nextPage()" [disabled]="currentPage + 1 >= totalPages">
+        Siguiente
+      </button>
+    </nav>
   </section>
 </main>

@@ -52,8 +52,9 @@ Y el saldo final es 300.000 COP
 
 ```gherkin
 Dado que existen solicitudes procesadas
-Cuando consulto una referencia o las solicitudes recientes
-Entonces veo los datos y resultados persistidos
+Cuando ingreso una requestReference persistida en Angular
+Entonces veo su referencia, estado, valor y fecha procesada
+Y cuando reviso las solicitudes recientes veo hasta cinco por página
+Y puedo avanzar o retroceder sin solicitar paginación avanzada al backend
 Y desde Angular puedo procesar otra solicitud y observar el resultado y la tabla actualizada
 ```
-

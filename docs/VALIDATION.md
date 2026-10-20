@@ -15,23 +15,25 @@ Fecha: 19 de octubre de 2026.
 | --- | --- |
 | Pruebas unitarias del backend | 4 ejecutadas, 0 fallos, 0 errores |
 | Pruebas de integración del backend | 5 ejecutadas, 0 fallos, 0 errores |
-| Pruebas unitarias de Angular | 8 ejecutadas, 0 fallos, Chrome Headless |
-| Compilación de producción de Angular | Correcta, paquete inicial de 237,98 kB |
+| Pruebas unitarias de Angular | 13 ejecutadas, 0 fallos, Chrome Headless |
+| Compilación de producción de Angular | Correcta, paquete inicial de 244,94 kB |
 | Arranque mediante `scripts/run.ps1` | Backend y frontend disponibles |
-| Flujo real desde la interfaz | Solicitud autorizada y visible en recientes |
+| Flujo real desde la interfaz | Consulta por referencia y navegación 1/2 -> 2/2 correctas |
 | Consola del navegador | Sin errores ni advertencias |
 | Vista móvil de 390 px | Sin desbordamiento horizontal de la página |
 
 Las pruebas del backend cubren validación aislada, consulta, repetición idempotente,
 conflicto por referencia, autorización, rechazo sin débito y dos solicitudes
 concurrentes que compiten por el mismo saldo. Las pruebas Angular cubren el
-formulario, carga inicial, resultado, error, sincronización del cliente y rutas HTTP.
+formulario, carga inicial, resultado, error, sincronización del cliente, búsqueda por
+referencia, codificación de URL, límites de paginación y rutas HTTP.
 
 ## QA funcional y visual
 
-Se comprobó el flujo en resoluciones de 1536 x 1024 y 390 x 844. El navegador
-integrado no pudo enlazar la pestaña local después de dos intentos, por lo que la
-misma revisión se ejecutó con Playwright contra la aplicación local.
+Se comprobó el flujo en resoluciones de 1536 x 1024 y 390 x 844. El Browser plugin
+no estaba disponible, por lo que la revisión se ejecutó con Playwright contra la
+aplicación local. La búsqueda consultó el endpoint real; para probar dos páginas
+sin contaminar la persistencia se simuló únicamente la respuesta de recientes.
 
 Lista de fidelidad respecto al concepto visual:
 
@@ -41,6 +43,7 @@ Lista de fidelidad respecto al concepto visual:
 4. El estado autorizado usa semántica verde y presenta los datos clave.
 5. La tabla de recientes conserva bordes, etiquetas de estado y actualización.
 6. En móvil los paneles se apilan y la tabla usa desplazamiento interno.
+7. La búsqueda encontrada y los controles de página son visibles y operables.
 
 Las diferencias intencionales son el uso de datos reales de la API en lugar de
 filas ilustrativas y el estado vacío inicial antes de procesar una solicitud.

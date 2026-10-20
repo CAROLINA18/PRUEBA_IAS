@@ -23,13 +23,31 @@ export class PreapprovedUsagePage implements OnInit {
     customerId: ['USR-10', Validators.required],
     amount: [600000, [Validators.required, Validators.min(1)]]
   });
+  readonly referenceQuery = this.formBuilder.nonNullable.control('', [
+    Validators.required,
+    Validators.maxLength(80)
+  ]);
+  readonly pageSize = 5;
 
   preApproved: PreApproved[] = [];
   recent: UsageResponse[] = [];
   result: UsageResponse | null = null;
+  lookupResult: UsageResponse | null = null;
   errorMessage = '';
+  lookupError = '';
   loading = false;
   refreshing = false;
+  searching = false;
+  currentPage = 0;
+
+  get paginatedRecent(): UsageResponse[] {
+    const start = this.currentPage * this.pageSize;
+    return this.recent.slice(start, start + this.pageSize);
+  }
+
+  get totalPages(): number {
+    return Math.max(1, Math.ceil(this.recent.length / this.pageSize));
+  }
 
   ngOnInit(): void {
     this.loadPreApproved();
@@ -61,9 +79,39 @@ export class PreapprovedUsagePage implements OnInit {
     this.api.recent()
       .pipe(finalize(() => (this.refreshing = false)))
       .subscribe({
-        next: (recent) => (this.recent = recent),
+        next: (recent) => {
+          this.recent = recent;
+          this.currentPage = 0;
+        },
         error: (error: HttpErrorResponse) => this.handleError(error)
       });
+  }
+
+  lookupByReference(): void {
+    this.referenceQuery.markAsTouched();
+    if (this.referenceQuery.invalid || this.searching) {
+      return;
+    }
+
+    this.searching = true;
+    this.lookupError = '';
+    this.lookupResult = null;
+    this.api.findByReference(this.referenceQuery.value)
+      .pipe(finalize(() => (this.searching = false)))
+      .subscribe({
+        next: (result) => (this.lookupResult = result),
+        error: (error: HttpErrorResponse) => {
+          this.lookupError = this.errorText(error);
+        }
+      });
+  }
+
+  previousPage(): void {
+    this.currentPage = Math.max(0, this.currentPage - 1);
+  }
+
+  nextPage(): void {
+    this.currentPage = Math.min(this.totalPages - 1, this.currentPage + 1);
   }
 
   syncCustomer(): void {
@@ -101,7 +149,11 @@ export class PreapprovedUsagePage implements OnInit {
   }
 
   private handleError(error: HttpErrorResponse): void {
+    this.errorMessage = this.errorText(error);
+  }
+
+  private errorText(error: HttpErrorResponse): string {
     const apiError = error.error as Partial<ApiError> | null;
-    this.errorMessage = apiError?.message ?? 'No fue posible comunicarse con el backend.';
+    return apiError?.message ?? 'No fue posible comunicarse con el backend.';
   }
 }

@@ -50,6 +50,7 @@ Como operador, quiero consultar una solicitud por referencia y ver las solicitud
 
 1. La consulta por referencia devuelve el resultado persistido o 404.
 2. La consulta reciente devuelve hasta 20 solicitudes, de más nueva a más antigua.
+3. Angular expone la consulta exacta por referencia y pagina localmente los resultados recientes en grupos de cinco.
 
 ### HU-05 - Operar desde Angular (P2)
 
@@ -61,6 +62,7 @@ Como operador, quiero procesar y revisar solicitudes desde una interfaz web inte
 2. El resultado autorizado o rechazado es visible y comprensible.
 3. La tabla de recientes se actualiza después de procesar y mediante una acción manual.
 4. La interfaz funciona en escritorio y se adapta a una pantalla móvil.
+5. La interfaz permite consultar una referencia persistida y navegar las páginas de resultados recientes.
 
 ## Requisitos funcionales trazables
 
@@ -110,4 +112,3 @@ Como operador, quiero procesar y revisar solicitudes desde una interfaz web inte
 ## Criterio de terminado
 
 La entrega está terminada cuando compilan backend y frontend, pasan las pruebas automatizadas, se verifica el flujo principal en navegador y README explica instalación, ejecución, decisiones, uso de IA y limitaciones.
-

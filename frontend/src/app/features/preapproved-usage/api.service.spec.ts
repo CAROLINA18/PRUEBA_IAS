@@ -43,6 +43,14 @@ describe('ApiService', () => {
     request.flush([]);
   });
 
+  it('gets a request by its encoded reference', () => {
+    service.findByReference(' REF/001 ').subscribe();
+
+    const request = http.expectOne('http://localhost:8080/api/requests/REF%2F001');
+    expect(request.request.method).toBe('GET');
+    request.flush({});
+  });
+
   it('gets the available pre-approved credits', () => {
     service.preApproved().subscribe();
 

@@ -17,6 +17,11 @@ export class ApiService {
     return this.http.get<UsageResponse[]>(`${ApiService.BASE_URL}/requests/recent`);
   }
 
+  findByReference(requestReference: string): Observable<UsageResponse> {
+    const reference = encodeURIComponent(requestReference.trim());
+    return this.http.get<UsageResponse>(`${ApiService.BASE_URL}/requests/${reference}`);
+  }
+
   preApproved(): Observable<PreApproved[]> {
     return this.http.get<PreApproved[]>(`${ApiService.BASE_URL}/pre-approved`);
   }

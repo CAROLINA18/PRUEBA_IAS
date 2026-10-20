@@ -283,6 +283,97 @@ dl {
   margin-bottom: 18px;
 }
 
+.lookup-form {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding: 16px;
+  background: #f5f8fc;
+  border: 1px solid #d4e0ec;
+  border-radius: 7px;
+
+  label {
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  small {
+    color: #b42318;
+    font-size: 12px;
+  }
+}
+
+.lookup-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 132px;
+  gap: 10px;
+}
+
+.lookup-button,
+.pagination button {
+  color: #0f63df;
+  background: #ffffff;
+  border: 1px solid #8eacd0;
+  border-radius: 7px;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    color: #ffffff;
+    background: #1266e8;
+    border-color: #1266e8;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+.lookup-feedback {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 14px;
+  padding: 14px 16px;
+  background: #e8f8ef;
+  border: 1px solid #a9dec0;
+  border-radius: 7px;
+
+  div {
+    min-width: 0;
+  }
+
+  span,
+  strong {
+    display: block;
+  }
+
+  span {
+    margin-bottom: 4px;
+    color: #526883;
+    font-size: 12px;
+  }
+
+  strong {
+    overflow-wrap: anywhere;
+    font-size: 14px;
+  }
+}
+
+.lookup-error {
+  display: flex;
+  gap: 8px;
+  color: #9e2019;
+  background: #fff0ef;
+  border-color: #efb7b2;
+
+  span {
+    margin: 0;
+    font-size: 14px;
+  }
+}
+
 .refresh-button {
   display: inline-flex;
   align-items: center;
@@ -361,6 +452,26 @@ table {
   text-align: center;
 }
 
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+
+  button {
+    min-width: 92px;
+    min-height: 38px;
+    padding: 0 14px;
+  }
+
+  span {
+    color: #526883;
+    font-size: 13px;
+    font-weight: 650;
+  }
+}
+
 @media (max-width: 900px) {
   .workflow-grid { grid-template-columns: 1fr; }
   .result-panel { min-height: auto; }
@@ -397,6 +508,33 @@ table {
     gap: 7px;
 
     label { padding-top: 0; }
+  }
+
+  .lookup-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .lookup-button {
+    min-height: 46px;
+  }
+
+  .lookup-feedback {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .lookup-error {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .pagination {
+    justify-content: space-between;
+    gap: 8px;
+
+    button {
+      min-width: 82px;
+      padding: 0 10px;
+    }
   }
 
   .result-status {

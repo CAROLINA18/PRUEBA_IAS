@@ -37,3 +37,11 @@
 - [x] Agregar pruebas unitarias de componente y servicio HTTP al frontend.
 - [x] Incorporar steering de producto, tecnología y estructura.
 - [x] Ejecutar nuevamente pruebas, build y smoke test.
+
+## Fase 6 - Consulta visible de solicitudes
+
+- [x] Exponer en Angular la consulta por `requestReference`.
+- [x] Mostrar respuesta encontrada y error 404 de forma separada.
+- [x] Paginar localmente los 20 resultados recientes en grupos de cinco.
+- [x] Agregar pruebas unitarias de búsqueda, URL codificada y paginación.
+- [x] Validar búsqueda y navegación en escritorio y móvil.

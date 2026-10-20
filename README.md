@@ -31,14 +31,15 @@ Abre [http://127.0.0.1:4200](http://127.0.0.1:4200). Para detener ambos procesos
 .\scripts\test.ps1
 ```
 
-El script ejecuta 9 pruebas backend —4 unitarias y 5 de integración—, 8 pruebas unitarias Angular y el build de producción. Las pruebas cubren:
+El script ejecuta 9 pruebas backend —4 unitarias y 5 de integración—, 13 pruebas unitarias Angular y el build de producción. Las pruebas cubren:
 
 - autorización y descuento;
 - rechazo sin descuento;
 - repetición idempotente;
 - conflicto de referencia con payload distinto;
-- dos solicitudes simultáneas que compiten por el mismo saldo.
+- dos solicitudes simultáneas que compiten por el mismo saldo;
 - validación del formulario, resultado, errores y sincronización del cliente;
+- consulta exacta por referencia y paginación simple de recientes;
 - contrato HTTP utilizado por el servicio Angular.
 
 ## Flujo de demostración
@@ -48,7 +49,8 @@ El script ejecuta 9 pruebas backend —4 unitarias y 5 de integración—, 8 pru
 3. Envía de nuevo exactamente `REF-001`: se recupera el resultado original sin otro descuento.
 4. Conserva `REF-001` y cambia el valor: la UI muestra el conflicto controlado.
 5. Usa `PRA-1002`: la solicitud queda rechazada porque está bloqueado.
-6. Revisa la tabla de solicitudes recientes y recarga la aplicación para comprobar persistencia.
+6. Consulta `REF-001` desde el buscador por referencia.
+7. Revisa la tabla de solicitudes recientes, navega sus páginas y recarga la aplicación para comprobar persistencia.
 
 ## API
 

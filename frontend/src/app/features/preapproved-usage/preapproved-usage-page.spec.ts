@@ -28,7 +28,12 @@ describe('PreapprovedUsagePage', () => {
   };
 
   beforeEach(async () => {
-    api = jasmine.createSpyObj<ApiService>('ApiService', ['process', 'recent', 'preApproved']);
+    api = jasmine.createSpyObj<ApiService>('ApiService', [
+      'process',
+      'recent',
+      'findByReference',
+      'preApproved'
+    ]);
     api.recent.and.returnValue(of([]));
     api.preApproved.and.returnValue(of(credits));
 
@@ -92,5 +97,66 @@ describe('PreapprovedUsagePage', () => {
     component.syncCustomer();
 
     expect(component.form.controls.customerId.value).toBe('USR-10');
+  });
+
+  it('finds a persisted request by its reference', () => {
+    api.findByReference.and.returnValue(of(authorized));
+    component.referenceQuery.setValue(' REF-001 ');
+
+    component.lookupByReference();
+
+    expect(api.findByReference).toHaveBeenCalledWith(' REF-001 ');
+    expect(component.lookupResult).toEqual(authorized);
+    expect(component.lookupError).toBe('');
+    expect(component.searching).toBeFalse();
+  });
+
+  it('executes the lookup when the search form is submitted', () => {
+    api.findByReference.and.returnValue(of(authorized));
+    fixture.detectChanges();
+    const input = fixture.nativeElement.querySelector('#referenceQuery') as HTMLInputElement;
+    const form = fixture.nativeElement.querySelector('.lookup-form') as HTMLFormElement;
+    input.value = 'REF-001';
+    input.dispatchEvent(new Event('input'));
+
+    form.dispatchEvent(new Event('submit', { cancelable: true }));
+    fixture.detectChanges();
+
+    expect(api.findByReference).toHaveBeenCalledWith('REF-001');
+    expect(fixture.nativeElement.querySelector('.lookup-feedback').textContent)
+      .toContain('REF-001');
+  });
+
+  it('shows an error when a reference does not exist', () => {
+    api.findByReference.and.returnValue(throwError(() => new HttpErrorResponse({
+      status: 404,
+      error: { message: 'No existe la solicitud UNKNOWN' }
+    })));
+    component.referenceQuery.setValue('UNKNOWN');
+
+    component.lookupByReference();
+
+    expect(component.lookupResult).toBeNull();
+    expect(component.lookupError).toBe('No existe la solicitud UNKNOWN');
+  });
+
+  it('paginates the recent requests in groups of five', () => {
+    component.recent = Array.from({ length: 6 }, (_, index) => ({
+      ...authorized,
+      requestReference: `REF-${index + 1}`
+    }));
+
+    expect(component.totalPages).toBe(2);
+    expect(component.paginatedRecent.map((item) => item.requestReference))
+      .toEqual(['REF-1', 'REF-2', 'REF-3', 'REF-4', 'REF-5']);
+
+    component.nextPage();
+
+    expect(component.currentPage).toBe(1);
+    expect(component.paginatedRecent.map((item) => item.requestReference)).toEqual(['REF-6']);
+    component.nextPage();
+    expect(component.currentPage).toBe(1);
+    component.previousPage();
+    expect(component.currentPage).toBe(0);
   });
 });

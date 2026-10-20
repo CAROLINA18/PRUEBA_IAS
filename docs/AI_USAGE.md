@@ -20,14 +20,14 @@ La IA se usó como acelerador de análisis y desarrollo dentro del tiempo limita
 - Servicio WebFlux/R2DBC con transacción reactiva y descuento condicional.
 - Pruebas unitarias y de integración de autorización, rechazo, repetición, conflicto y concurrencia.
 - Pruebas Angular del componente y del contrato HTTP.
-- Formulario Angular, resultado y tabla de solicitudes recientes.
+- Formulario Angular, resultado, consulta por referencia y tabla paginada de solicitudes recientes.
 - Scripts PowerShell para preparar, ejecutar, detener y validar.
 
 ## Cómo se validaron
 
 - Compilación con Java 21 como nivel objetivo.
 - Nueve pruebas backend con JUnit, Mockito y Reactor Test.
-- Ocho pruebas frontend con Jasmine, Karma y Chrome Headless.
+- Trece pruebas frontend con Jasmine, Karma y Chrome Headless.
 - Build de producción de Angular.
 - Smoke test de los endpoints y recorrido del flujo principal en navegador.
 - Inspección visual en escritorio y móvil contra el concepto guardado en la spec.
@@ -41,6 +41,7 @@ La IA se usó como acelerador de análisis y desarrollo dentro del tiempo limita
 - Se corrigió el mapeo de mayúsculas/minúsculas de H2 detectado por las pruebas.
 - Se adaptó la estructura inicialmente organizada por capas técnicas a slices verticales y se volvió a ejecutar toda la suite.
 - Se corrigió el reinicio local para detectar y cerrar procesos huérfanos que mantenían bloqueado el JAR en Windows.
+- El QA visual detectó que `ngSubmit` no se activaba sin un `FormGroup`; se cambió a un evento `submit` controlado y se agregó una prueba DOM de regresión.
 - El contenido ficticio del concepto visual no se usó como dato real; la UI consume únicamente el backend.
 
 ## Protección de información

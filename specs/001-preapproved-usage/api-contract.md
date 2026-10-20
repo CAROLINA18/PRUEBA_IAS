@@ -40,8 +40,10 @@ Devuelve HTTP 200 con el resultado persistido o HTTP 404.
 ## GET `/requests/recent`
 
 Devuelve un arreglo de máximo 20 resultados ordenados por `processedAt` descendente.
+La API mantiene este contrato mínimo sin parámetros `page`/`size`; Angular presenta
+el arreglo en páginas de cinco elementos. Esto evita una paginación avanzada que
+el enunciado no exige y conserva una sola consulta reactiva acotada.
 
 ## GET `/pre-approved`
 
 Devuelve los preaprobados semilla y su saldo actual para poblar el formulario y facilitar la demostración.
-
