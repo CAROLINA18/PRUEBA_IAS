@@ -1,0 +1,158 @@
+<header class="topbar">
+  <div class="brand" aria-label="BancoIAS">
+    <strong>Banco<span>IAS</span></strong>
+    <div class="divider" aria-hidden="true"></div>
+    <p>Uso de preaprobados</p>
+  </div>
+</header>
+
+<main class="page-shell">
+  <h1>Procesar solicitud</h1>
+
+  <div class="workflow-grid">
+    <section class="panel request-panel" aria-labelledby="request-title">
+      <h2 id="request-title">Datos de la solicitud</h2>
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="field-row">
+          <label for="reference">Referencia</label>
+          <div class="control-stack">
+            <input id="reference" type="text" formControlName="requestReference" />
+            @if (form.controls.requestReference.touched && form.controls.requestReference.invalid) {
+              <small>Ingresa una referencia.</small>
+            }
+          </div>
+        </div>
+
+        <div class="field-row">
+          <label for="preApproved">Preaprobado</label>
+          <select id="preApproved" formControlName="preApprovedId" (change)="syncCustomer()">
+            @for (item of preApproved; track item.id) {
+              <option [value]="item.id">
+                {{ item.id }} · {{ item.status === 'ACTIVE' ? 'Activo' : 'Bloqueado' }} ·
+                {{ formatCurrency(item.availableAmount) }}
+              </option>
+            }
+            @if (preApproved.length === 0) {
+              <option value="PRA-1001">PRA-1001</option>
+            }
+          </select>
+        </div>
+
+        <div class="field-row">
+          <label for="customer">Cliente</label>
+          <select id="customer" formControlName="customerId">
+            <option value="USR-10">USR-10</option>
+            <option value="USR-20">USR-20</option>
+          </select>
+        </div>
+
+        <div class="field-row">
+          <label for="amount">Valor solicitado (COP)</label>
+          <div class="control-stack">
+            <input id="amount" type="number" min="1" step="1000" formControlName="amount" />
+            @if (form.controls.amount.touched && form.controls.amount.invalid) {
+              <small>El valor debe ser mayor que cero.</small>
+            }
+          </div>
+        </div>
+
+        <button class="primary-button" type="submit" [disabled]="loading">
+          @if (loading) { Procesando… } @else { Procesar solicitud }
+        </button>
+      </form>
+    </section>
+
+    <section
+      class="panel result-panel"
+      [class.authorized]="result?.status === 'AUTHORIZED'"
+      [class.rejected]="result?.status === 'REJECTED'"
+      aria-labelledby="result-title"
+      aria-live="polite"
+    >
+      <h2 id="result-title">Resultado</h2>
+
+      @if (errorMessage) {
+        <div class="api-error" role="alert">
+          <strong>No se pudo procesar</strong>
+          <p>{{ errorMessage }}</p>
+        </div>
+      } @else if (result) {
+        <div class="result-status">
+          <span class="status-icon" aria-hidden="true">
+            @if (result.status === 'AUTHORIZED') {
+              <svg viewBox="0 0 24 24"><path d="m5 12.5 4.2 4.2L19 7" /></svg>
+            } @else {
+              <svg viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17" /></svg>
+            }
+          </span>
+          <div>
+            <strong>{{ result.status === 'AUTHORIZED' ? 'AUTORIZADA' : 'RECHAZADA' }}</strong>
+            <p>
+              {{ result.rejectionReason || 'La solicitud fue procesada correctamente.' }}
+              @if (result.replayed) { <span>Resultado original recuperado.</span> }
+            </p>
+          </div>
+        </div>
+
+        <dl>
+          <div><dt>Referencia</dt><dd>{{ result.requestReference }}</dd></div>
+          <div><dt>Valor solicitado</dt><dd>{{ formatCurrency(result.amount) }}</dd></div>
+          <div><dt>Saldo restante</dt><dd>{{ formatCurrency(result.remainingAmount) }}</dd></div>
+        </dl>
+      } @else {
+        <div class="empty-result">
+          <span aria-hidden="true">✓</span>
+          <strong>Lista para procesar</strong>
+          <p>Completa el formulario para ver aquí el resultado.</p>
+        </div>
+      }
+    </section>
+  </div>
+
+  <section class="recent-panel" aria-labelledby="recent-title">
+    <div class="section-heading">
+      <h2 id="recent-title">Solicitudes recientes</h2>
+      <button class="refresh-button" type="button" (click)="loadRecent()" [disabled]="refreshing">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.9-4M4 3v5h5M4 13a8 8 0 0 0 14.9 4M20 21v-5h-5" /></svg>
+        {{ refreshing ? 'Actualizando…' : 'Actualizar' }}
+      </button>
+    </div>
+
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Referencia</th>
+            <th>Preaprobado</th>
+            <th>Cliente</th>
+            <th>Valor</th>
+            <th>Estado</th>
+            <th>Procesada</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of recent; track item.requestReference) {
+            <tr>
+              <td>{{ item.requestReference }}</td>
+              <td>{{ item.preApprovedId }}</td>
+              <td>{{ item.customerId }}</td>
+              <td>{{ formatCurrency(item.amount) }}</td>
+              <td>
+                <span class="status-label" [class.ok]="item.status === 'AUTHORIZED'">
+                  {{ item.status === 'AUTHORIZED' ? 'AUTORIZADA' : 'RECHAZADA' }}
+                </span>
+              </td>
+              <td>{{ formatDate(item.processedAt) }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td class="empty-table" colspan="6">Aún no hay solicitudes procesadas.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+

@@ -17,9 +17,9 @@
 
 ## Fase 3 - Frontend
 
-- [ ] Generar aplicación Angular standalone.
-- [ ] Implementar formulario, resultado y solicitudes recientes.
-- [ ] Integrar API real y estados de carga/error.
+- [x] Generar aplicación Angular standalone.
+- [x] Implementar formulario, resultado y solicitudes recientes.
+- [x] Integrar API real y estados de carga/error.
 - [ ] Adaptar escritorio/móvil al concepto visual aprobado.
 
 ## Fase 4 - Operación y entrega
