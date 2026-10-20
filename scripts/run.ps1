@@ -16,6 +16,9 @@ if (-not (Test-Path -LiteralPath $angularCli)) {
     throw 'Faltan dependencias del frontend. Ejecuta primero .\scripts\setup.ps1.'
 }
 
+Write-Host 'Cerrando una instancia anterior del proyecto, si existe...' -ForegroundColor DarkGray
+& (Join-Path $PSScriptRoot 'stop.ps1')
+
 Write-Host 'Compilando backend...' -ForegroundColor Cyan
 $env:MAVEN_USER_HOME = $mavenHome
 Push-Location (Join-Path $projectRoot 'backend')

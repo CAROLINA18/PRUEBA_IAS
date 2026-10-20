@@ -23,7 +23,7 @@ Abre [http://127.0.0.1:4200](http://127.0.0.1:4200). Para detener ambos procesos
 .\scripts\stop.ps1
 ```
 
-`setup.ps1` verifica Java y Node.js, intenta instalarlos con `winget` si faltan, descarga Maven mediante el wrapper oficial y ejecuta `npm install`. `run.ps1` compila el backend, inicia backend y frontend en segundo plano, espera sus health checks y guarda logs/PID temporales en `.run/`.
+`setup.ps1` verifica Java y Node.js, intenta instalarlos con `winget` si faltan, descarga Maven mediante el wrapper oficial y ejecuta `npm install`. `run.ps1` detiene cualquier instancia anterior de este mismo proyecto, compila el backend, inicia backend y frontend en segundo plano, espera sus health checks y guarda logs/PID temporales en `.run/`. Esto evita que Windows mantenga bloqueado el JAR durante una recompilación.
 
 ## Validación automática
 

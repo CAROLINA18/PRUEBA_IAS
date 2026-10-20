@@ -40,6 +40,7 @@ La IA se usó como acelerador de análisis y desarrollo dentro del tiempo limita
 - Se corrigió el Maven Wrapper generado por Spring Initializr para manejar una ruta `.m2` no enlazada en PowerShell.
 - Se corrigió el mapeo de mayúsculas/minúsculas de H2 detectado por las pruebas.
 - Se adaptó la estructura inicialmente organizada por capas técnicas a slices verticales y se volvió a ejecutar toda la suite.
+- Se corrigió el reinicio local para detectar y cerrar procesos huérfanos que mantenían bloqueado el JAR en Windows.
 - El contenido ficticio del concepto visual no se usó como dato real; la UI consume únicamente el backend.
 
 ## Protección de información
