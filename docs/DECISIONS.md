@@ -52,10 +52,32 @@
 
 **Decisión.** Agrupar por capacidad: `usage` contiene el flujo completo de solicitudes, `credit` contiene consulta y débito de preaprobados, y `shared` se limita a configuración y errores transversales. Angular concentra la pantalla, modelos, API y pruebas en `features/preapproved-usage`.
 
+Esta fue la opción más adecuada para el tamaño y el dominio de la prueba, no una regla universal: RF01-RF06 giran alrededor de dos capacidades cohesionadas y se espera que cambien por funcionalidad. Una arquitectura por capas globales repartiría un cambio pequeño entre paquetes `controller`, `service`, `repository` y `domain`; las slices reducen esa dispersión sin introducir la ceremonia de puertos, adaptadores o microservicios.
+
 **Trade-off.** Las slices pueden contener clases de distintos tipos técnicos. A cambio, los elementos que cambian juntos están juntos y es más fácil localizar el impacto de una funcionalidad.
 
 **Validación.** La suite completa pasa después del movimiento y los contratos HTTP permanecen iguales.
 
-## 6. Alcance deliberadamente mínimo
+## 6. Procesamiento HTTP directo sin RabbitMQ
 
-Se excluyen RabbitMQ, autenticación, administración de maestros, paginación avanzada, Docker y patrones distribuidos. Todos están fuera del criterio obligatorio o agregarían una dependencia innecesaria. La arquitectura vertical evita capas ceremoniales y mantiene `shared` pequeño.
+**Contexto.** RabbitMQ aparece como opcional. El cliente necesita conocer inmediatamente si la utilización fue autorizada o rechazada, y el resultado depende de una transacción consistente sobre el saldo.
+
+**Alternativas.** Una cola desacopla productores y consumidores, absorbe picos y permite reintentos asíncronos. También exige publicación confiable, correlación, consumidor, política de reintentos, dead-letter queue y una forma de consultar o notificar el resultado. Agregarla solo para llamar reactiva a la solución no resuelve RF04/RF05 y aumenta los estados de fallo.
+
+**Decisión.** Mantener un flujo petición-respuesta con WebFlux y R2DBC. Reactividad significa composición no bloqueante y manejo eficiente de concurrencia; no implica usar mensajería. La consistencia se garantiza en la base mediante transacción, `UPDATE` condicional y clave única.
+
+**Cuándo cambiaría.** RabbitMQ sería apropiado si el negocio aceptara respuesta diferida, existieran integraciones lentas, se necesitara absorber ráfagas, distribuir trabajo o publicar eventos posteriores. En ese caso se usaría un patrón outbox para no separar el commit financiero de la publicación.
+
+## 7. Datos de selección obtenidos desde la API
+
+**Contexto.** Las primeras opciones del formulario incluían identificadores de preaprobados y clientes escritos en la plantilla para facilitar la demostración.
+
+**Decisión.** El frontend obtiene los preaprobados mediante `GET /api/pre-approved`; el selector de preaprobados y la lista única de clientes se derivan de esa respuesta. La plantilla solo conserva textos de interfaz y una opción vacía, no identificadores de negocio. Al cargar, se selecciona el primer preaprobado disponible y se sincroniza su cliente.
+
+**Trade-off.** Para el alcance actual no se agregó un endpoint independiente de clientes. Si el catálogo de clientes tuviera vida propia, permisos o paginación, debería convertirse en una capacidad y contrato separados.
+
+**Validación.** Una prueba de componente verifica que las opciones renderizadas coinciden con la respuesta simulada de la API.
+
+## 8. Alcance deliberadamente mínimo
+
+Se excluyen autenticación, administración de maestros, paginación avanzada, Docker y patrones distribuidos. Todos están fuera del criterio obligatorio o agregarían una dependencia innecesaria. La arquitectura vertical evita capas ceremoniales y mantiene `shared` pequeño.

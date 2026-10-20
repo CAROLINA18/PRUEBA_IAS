@@ -27,7 +27,7 @@ La IA se usó como acelerador de análisis y desarrollo dentro del tiempo limita
 
 - Compilación con Java 21 como nivel objetivo.
 - Nueve pruebas backend con JUnit, Mockito y Reactor Test.
-- Trece pruebas frontend con Jasmine, Karma y Chrome Headless.
+- Catorce pruebas frontend con Jasmine, Karma y Chrome Headless.
 - Build de producción de Angular.
 - Smoke test de los endpoints y recorrido del flujo principal en navegador.
 - Inspección visual en escritorio y móvil contra el concepto guardado en la spec.
@@ -42,6 +42,7 @@ La IA se usó como acelerador de análisis y desarrollo dentro del tiempo limita
 - Se adaptó la estructura inicialmente organizada por capas técnicas a slices verticales y se volvió a ejecutar toda la suite.
 - Se corrigió el reinicio local para detectar y cerrar procesos huérfanos que mantenían bloqueado el JAR en Windows.
 - El QA visual detectó que `ngSubmit` no se activaba sin un `FormGroup`; se cambió a un evento `submit` controlado y se agregó una prueba DOM de regresión.
+- Se detectaron identificadores de clientes y un preaprobado de respaldo escritos en la plantilla; se reemplazaron por opciones derivadas de la respuesta de la API y se agregó una prueba de regresión.
 - El contenido ficticio del concepto visual no se usó como dato real; la UI consume únicamente el backend.
 
 ## Protección de información

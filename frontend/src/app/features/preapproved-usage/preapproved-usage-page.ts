@@ -19,8 +19,8 @@ export class PreapprovedUsagePage implements OnInit {
 
   readonly form = this.formBuilder.nonNullable.group({
     requestReference: ['REF-001', [Validators.required, Validators.maxLength(80)]],
-    preApprovedId: ['PRA-1001', Validators.required],
-    customerId: ['USR-10', Validators.required],
+    preApprovedId: ['', Validators.required],
+    customerId: ['', Validators.required],
     amount: [600000, [Validators.required, Validators.min(1)]]
   });
   readonly referenceQuery = this.formBuilder.nonNullable.control('', [
@@ -47,6 +47,10 @@ export class PreapprovedUsagePage implements OnInit {
 
   get totalPages(): number {
     return Math.max(1, Math.ceil(this.recent.length / this.pageSize));
+  }
+
+  get customers(): string[] {
+    return [...new Set(this.preApproved.map((item) => item.customerId))];
   }
 
   ngOnInit(): void {
@@ -143,7 +147,16 @@ export class PreapprovedUsagePage implements OnInit {
 
   private loadPreApproved(): void {
     this.api.preApproved().subscribe({
-      next: (items) => (this.preApproved = items),
+      next: (items) => {
+        this.preApproved = items;
+        const selectedStillExists = items.some(
+          (item) => item.id === this.form.controls.preApprovedId.value
+        );
+        if (!selectedStillExists) {
+          this.form.controls.preApprovedId.setValue(items[0]?.id ?? '');
+          this.syncCustomer();
+        }
+      },
       error: (error: HttpErrorResponse) => this.handleError(error)
     });
   }

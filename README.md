@@ -31,7 +31,7 @@ Abre [http://127.0.0.1:4200](http://127.0.0.1:4200). Para detener ambos procesos
 .\scripts\test.ps1
 ```
 
-El script ejecuta 9 pruebas backend —4 unitarias y 5 de integración—, 13 pruebas unitarias Angular y el build de producción. Las pruebas cubren:
+El script ejecuta 9 pruebas backend —4 unitarias y 5 de integración—, 14 pruebas unitarias Angular y el build de producción. Las pruebas cubren:
 
 - autorización y descuento;
 - rechazo sin descuento;
@@ -89,7 +89,7 @@ El saldo se descuenta mediante un `UPDATE` atómico condicionado a que el preapr
 
 ## Arquitectura vertical
 
-El código se organiza por capacidad de negocio, de modo que cada cambio funcional quede localizado:
+El código se organiza por capacidad de negocio, de modo que cada cambio funcional quede localizado. Esta decisión encaja con un dominio pequeño de dos capacidades y evita repartir cada requerimiento entre capas técnicas globales:
 
 ```text
 backend/.../usage/       procesar y consultar solicitudes
@@ -99,6 +99,23 @@ frontend/src/app/features/preapproved-usage/  flujo completo de la pantalla
 ```
 
 Cada slice conserva juntos endpoint, caso de uso, modelos, acceso a datos y pruebas que cambian por la misma razón. `shared` no contiene reglas de negocio. Las directrices para extender la solución están en `.kiro/steering/`.
+
+## Por qué no se agregó RabbitMQ
+
+WebFlux y RabbitMQ resuelven problemas distintos. WebFlux/R2DBC mantienen no bloqueante el flujo HTTP y el acceso a datos; RabbitMQ sirve para desacoplar trabajo asíncrono. Esta operación requiere una respuesta inmediata de autorización o rechazo y una transacción consistente sobre el cupo, por lo que una cola agregaría publicación, consumidor, reintentos, DLQ y correlación sin mejorar los RF obligatorios.
+
+RabbitMQ tendría sentido si el resultado pudiera ser diferido, hubiera integraciones lentas, picos que amortiguar o eventos para otros sistemas. Esa evolución debería publicar mediante outbox transaccional. El análisis completo está en [DECISIONS.md](docs/DECISIONS.md).
+
+## Buenas prácticas aplicadas
+
+- contratos y criterios de aceptación definidos antes del código;
+- slices verticales cohesionadas y `shared` limitado a asuntos transversales;
+- flujo reactivo sin llamadas bloqueantes en el camino HTTP;
+- reglas de consistencia respaldadas por la base: transacción, actualización condicional y restricción única;
+- validación de entrada y traducción uniforme de errores HTTP;
+- datos de negocio del formulario obtenidos de la API, no escritos en el HTML;
+- pruebas unitarias, de integración, de concurrencia y build de producción automatizados;
+- scripts reproducibles, dependencias fijadas, sin secretos ni datos reales versionados.
 
 ## Datos semilla
 
@@ -139,22 +156,3 @@ docs/       decisiones y registro de IA
 - Deliberadamente excluido: RabbitMQ, autenticación, administración de maestros y paginación avanzada.
 - H2 en archivo simplifica la evaluación local. En producción se recomienda PostgreSQL R2DBC, migraciones versionadas, observabilidad y pruebas de carga.
 - La API corre en una sola zona horaria lógica y expone instantes ISO-8601; la UI los presenta con la zona del navegador.
-
-## Entrega
-
-Antes de enviar:
-
-```powershell
-.\scripts\test.ps1
-git status
-git log --oneline
-git rev-parse HEAD
-```
-
-En el correo final indica la URL pública, la rama y el SHA exacto. Ejemplo:
-
-```text
-Repositorio: https://github.com/USUARIO/REPOSITORIO
-Rama: main
-Commit a evaluar: SHA_COMPLETO
-```

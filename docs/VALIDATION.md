@@ -15,25 +15,26 @@ Fecha: 19 de octubre de 2026.
 | --- | --- |
 | Pruebas unitarias del backend | 4 ejecutadas, 0 fallos, 0 errores |
 | Pruebas de integración del backend | 5 ejecutadas, 0 fallos, 0 errores |
-| Pruebas unitarias de Angular | 13 ejecutadas, 0 fallos, Chrome Headless |
-| Compilación de producción de Angular | Correcta, paquete inicial de 244,94 kB |
+| Pruebas unitarias de Angular | 14 ejecutadas, 0 fallos, Chrome Headless |
+| Compilación de producción de Angular | Correcta, paquete inicial de 245,21 kB |
 | Arranque mediante `scripts/run.ps1` | Backend y frontend disponibles |
-| Flujo real desde la interfaz | Consulta por referencia y navegación 1/2 -> 2/2 correctas |
+| Flujo real desde la interfaz | Opciones cargadas desde API y sincronización preaprobado -> cliente correctas |
 | Consola del navegador | Sin errores ni advertencias |
 | Vista móvil de 390 px | Sin desbordamiento horizontal de la página |
 
 Las pruebas del backend cubren validación aislada, consulta, repetición idempotente,
 conflicto por referencia, autorización, rechazo sin débito y dos solicitudes
 concurrentes que compiten por el mismo saldo. Las pruebas Angular cubren el
-formulario, carga inicial, resultado, error, sincronización del cliente, búsqueda por
-referencia, codificación de URL, límites de paginación y rutas HTTP.
+formulario, carga inicial, resultado, error, opciones provenientes de la API,
+sincronización del cliente, búsqueda por referencia, codificación de URL, límites de
+paginación y rutas HTTP.
 
 ## QA funcional y visual
 
-Se comprobó el flujo en resoluciones de 1536 x 1024 y 390 x 844. El Browser plugin
-no estaba disponible, por lo que la revisión se ejecutó con Playwright contra la
-aplicación local. La búsqueda consultó el endpoint real; para probar dos páginas
-sin contaminar la persistencia se simuló únicamente la respuesta de recientes.
+Se comprobó el flujo en escritorio y 390 x 844 mediante el navegador integrado y
+su API Playwright contra la aplicación local. Se verificó que los identificadores
+visibles coincidieran con `GET /api/pre-approved`, que seleccionar `PRA-2001`
+sincronizara `USR-20` y que no existieran errores ni advertencias de consola.
 
 Lista de fidelidad respecto al concepto visual:
 

@@ -12,7 +12,8 @@ describe('PreapprovedUsagePage', () => {
   let api: jasmine.SpyObj<ApiService>;
 
   const credits: PreApproved[] = [
-    { id: 'PRA-1001', customerId: 'USR-10', status: 'ACTIVE', availableAmount: 1000000 }
+    { id: 'PRA-1001', customerId: 'USR-10', status: 'ACTIVE', availableAmount: 1000000 },
+    { id: 'PRA-2001', customerId: 'USR-20', status: 'ACTIVE', availableAmount: 2000000 }
   ];
 
   const authorized: UsageResponse = {
@@ -52,6 +53,8 @@ describe('PreapprovedUsagePage', () => {
     fixture.detectChanges();
 
     expect(component.preApproved).toEqual(credits);
+    expect(component.form.controls.preApprovedId.value).toBe('PRA-1001');
+    expect(component.form.controls.customerId.value).toBe('USR-10');
     expect(component.recent).toEqual([authorized]);
     expect(api.preApproved).toHaveBeenCalledTimes(1);
     expect(api.recent).toHaveBeenCalledTimes(1);
@@ -68,6 +71,7 @@ describe('PreapprovedUsagePage', () => {
 
   it('shows an authorized result and refreshes server data', () => {
     api.process.and.returnValue(of(authorized));
+    component.form.patchValue({ preApprovedId: 'PRA-1001', customerId: 'USR-10' });
 
     component.submit();
 
@@ -82,6 +86,7 @@ describe('PreapprovedUsagePage', () => {
       status: 409,
       error: { message: 'La referencia ya fue procesada' }
     })));
+    component.form.patchValue({ preApprovedId: 'PRA-1001', customerId: 'USR-10' });
 
     component.submit();
 
@@ -97,6 +102,20 @@ describe('PreapprovedUsagePage', () => {
     component.syncCustomer();
 
     expect(component.form.controls.customerId.value).toBe('USR-10');
+  });
+
+  it('renders pre-approved and customer options from the API without hardcoded business data', () => {
+    fixture.detectChanges();
+
+    const preApprovedOptions = Array.from(
+      fixture.nativeElement.querySelectorAll('#preApproved option') as NodeListOf<HTMLOptionElement>
+    ).map((option) => option.value);
+    const customerOptions = Array.from(
+      fixture.nativeElement.querySelectorAll('#customer option') as NodeListOf<HTMLOptionElement>
+    ).map((option) => option.value);
+
+    expect(preApprovedOptions).toEqual(['', 'PRA-1001', 'PRA-2001']);
+    expect(customerOptions).toEqual(['', 'USR-10', 'USR-20']);
   });
 
   it('finds a persisted request by its reference', () => {

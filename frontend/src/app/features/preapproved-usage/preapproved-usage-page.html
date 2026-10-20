@@ -27,14 +27,12 @@
         <div class="field-row">
           <label for="preApproved">Preaprobado</label>
           <select id="preApproved" formControlName="preApprovedId" (change)="syncCustomer()">
+            <option value="" disabled>Selecciona un preaprobado</option>
             @for (item of preApproved; track item.id) {
               <option [value]="item.id">
                 {{ item.id }} · {{ item.status === 'ACTIVE' ? 'Activo' : 'Bloqueado' }} ·
                 {{ formatCurrency(item.availableAmount) }}
               </option>
-            }
-            @if (preApproved.length === 0) {
-              <option value="PRA-1001">PRA-1001</option>
             }
           </select>
         </div>
@@ -42,8 +40,10 @@
         <div class="field-row">
           <label for="customer">Cliente</label>
           <select id="customer" formControlName="customerId">
-            <option value="USR-10">USR-10</option>
-            <option value="USR-20">USR-20</option>
+            <option value="" disabled>Selecciona un cliente</option>
+            @for (customerId of customers; track customerId) {
+              <option [value]="customerId">{{ customerId }}</option>
+            }
           </select>
         </div>
 
@@ -57,7 +57,7 @@
           </div>
         </div>
 
-        <button class="primary-button" type="submit" [disabled]="loading">
+        <button class="primary-button" type="submit" [disabled]="loading || preApproved.length === 0">
           @if (loading) { Procesando… } @else { Procesar solicitud }
         </button>
       </form>
